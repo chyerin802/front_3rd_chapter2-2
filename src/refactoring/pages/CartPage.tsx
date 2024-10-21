@@ -1,7 +1,8 @@
 import { Coupon, Product } from '../../types.ts';
 import { useCart } from '../hooks/index.ts';
-import ProductCard from '../components/ProductCard.tsx';
-import CartItemCard from '../components/CartItemCard.tsx';
+import ProductCard from '../components/ProductCard';
+import CartItemCard from '../components/CartItemCard';
+import CouponOption from '../components/CouponOption';
 
 interface Props {
   products: Product[];
@@ -67,12 +68,7 @@ export const CartPage = ({ products, coupons }: Props) => {
             >
               <option value="">쿠폰 선택</option>
               {coupons.map((coupon, index) => (
-                <option key={coupon.code} value={index}>
-                  {coupon.name} -{' '}
-                  {coupon.discountType === 'amount'
-                    ? `${coupon.discountValue}원`
-                    : `${coupon.discountValue}%`}
-                </option>
+                <CouponOption coupon={coupon} value={index} />
               ))}
             </select>
             {selectedCoupon && (
