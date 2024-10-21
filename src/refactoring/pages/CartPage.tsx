@@ -40,6 +40,18 @@ export const CartPage = ({ products, coupons }: Props) => {
     return appliedDiscount;
   };
 
+  const handleClickAddToCart = (product: Product) => {
+    const remainingStock = getRemainingStock(product);
+    if (remainingStock <= 0) return;
+
+    const existingItem = cart.find((item) => item.product.id === product.id);
+    if (existingItem) {
+      updateQuantity(product.id, Math.min(existingItem.quantity + 1, product.stock));
+    } else {
+      addToCart(product);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">장바구니</h1>
@@ -81,7 +93,7 @@ export const CartPage = ({ products, coupons }: Props) => {
                     </ul>
                   )}
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={() => handleClickAddToCart(product)}
                     className={`w-full px-3 py-1 rounded ${
                       remainingStock > 0
                         ? 'bg-blue-500 text-white hover:bg-blue-600'
