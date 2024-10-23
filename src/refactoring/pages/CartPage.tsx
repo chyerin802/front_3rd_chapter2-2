@@ -47,7 +47,12 @@ export const CartPage = ({ products, coupons }: Props) => {
           <h2 className="text-2xl font-semibold mb-4">상품 목록</h2>
           <div className="space-y-2">
             {products.map((product) => (
-              <ProductCard product={product} onAddToCart={() => handleAddToCart(product)} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                remainingStock={getRemainingStock(product)}
+                onAddToCart={() => handleAddToCart(product)}
+              />
             ))}
           </div>
         </div>
@@ -56,7 +61,7 @@ export const CartPage = ({ products, coupons }: Props) => {
 
           <div className="space-y-2">
             {cart.map((item) => (
-              <CartItemCard item={item} />
+              <CartItemCard key={item.product.id} item={item} />
             ))}
           </div>
 
@@ -68,7 +73,7 @@ export const CartPage = ({ products, coupons }: Props) => {
             >
               <option value="">쿠폰 선택</option>
               {coupons.map((coupon, index) => (
-                <CouponOption coupon={coupon} value={index} />
+                <CouponOption key={coupon.code} coupon={coupon} value={index} />
               ))}
             </select>
             {selectedCoupon && (
