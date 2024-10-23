@@ -4,6 +4,7 @@ import { AdminPage } from './pages/AdminPage.tsx';
 import Header from './components/Header.tsx';
 import { Coupon, Product } from '../types.ts';
 import { useCoupons, useProducts } from './hooks';
+import { ProductsProvider, CouponsProvider, CartProvider } from './contexts';
 
 const initialProducts: Product[] = [
   {
@@ -59,19 +60,25 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header isAdmin={isAdmin} onTogglePage={handleTogglePage} />
-      <main className="container mx-auto mt-6">
-        {isAdmin ? (
-          <AdminPage
-            products={products}
-            coupons={coupons}
-            onProductUpdate={updateProduct}
-            onProductAdd={addProduct}
-            onCouponAdd={addCoupon}
-          />
-        ) : (
-          <CartPage products={products} coupons={coupons} />
-        )}
-      </main>
+      <ProductsProvider initialProducts={initialProducts}>
+        <CouponsProvider initialCoupons={initialCoupons}>
+          <main className="container mx-auto mt-6">
+            {isAdmin ? (
+              <AdminPage
+                products={products}
+                coupons={coupons}
+                onProductUpdate={updateProduct}
+                onProductAdd={addProduct}
+                onCouponAdd={addCoupon}
+              />
+            ) : (
+              <CartProvider>
+                <CartPage />
+              </CartProvider>
+            )}
+          </main>
+        </CouponsProvider>
+      </ProductsProvider>
     </div>
   );
 };
