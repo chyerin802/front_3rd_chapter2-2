@@ -6,7 +6,7 @@ interface Props extends React.OptionHTMLAttributes<number> {
 }
 
 const CouponOption = ({ value, coupon }: Props) => (
-  <option key={coupon.code} value={value}>
+  <option value={value}>
     {coupon.name} -{' '}
     {coupon.discountType === 'amount' ? `${coupon.discountValue}원` : `${coupon.discountValue}%`}
   </option>

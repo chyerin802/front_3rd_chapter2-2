@@ -1,8 +1,8 @@
-import { CartPage } from './pages/CartPage.tsx';
+import { CartPage } from './pages/CartPage';
 import { AdminPage } from './pages/AdminPage.tsx';
 import Header from './components/Header.tsx';
 import { Coupon, Product } from '../types.ts';
-import { useCoupons, useProducts, useUserRole } from './hooks';
+import { useUserRole } from './hooks';
 import { ProductsProvider, CouponsProvider, CartProvider } from './contexts';
 
 const initialProducts: Product[] = [
@@ -48,8 +48,6 @@ const initialCoupons: Coupon[] = [
 ];
 
 const App = () => {
-  const { products, updateProduct, addProduct } = useProducts(initialProducts);
-  const { coupons, addCoupon } = useCoupons(initialCoupons);
   const { isAdmin, toggleRole } = useUserRole();
 
   return (
@@ -59,13 +57,7 @@ const App = () => {
         <CouponsProvider initialCoupons={initialCoupons}>
           <main className="container mx-auto mt-6">
             {isAdmin ? (
-              <AdminPage
-                products={products}
-                coupons={coupons}
-                onProductUpdate={updateProduct}
-                onProductAdd={addProduct}
-                onCouponAdd={addCoupon}
-              />
+              <AdminPage />
             ) : (
               <CartProvider>
                 <CartPage />
