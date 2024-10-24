@@ -1,31 +1,17 @@
 import { CartItem } from '../../types';
+import { useCartContext } from '../contexts';
+import { getAppliedDiscount } from '../utils/cart';
 
 interface Props {
   item: CartItem;
 }
 
 const CartItemCard = ({ item }: Props) => {
-  const getAppliedDiscount = (item: CartItem) => {
-    const { discounts } = item.product;
-    const { quantity } = item;
-    let appliedDiscount = 0;
-    for (const discount of discounts) {
-      if (quantity >= discount.quantity) {
-        appliedDiscount = Math.max(appliedDiscount, discount.rate);
-      }
-    }
-    return appliedDiscount;
-  };
-
+  const { updateQuantity, removeFromCart } = useCartContext();
   const appliedDiscount = getAppliedDiscount(item);
 
-  // TODO: event handler
-
   return (
-    <div
-      key={item.product.id}
-      className="flex justify-between cardItems-center bg-white p-3 rounded shadow"
-    >
+    <div className="flex justify-between cardItems-center bg-white p-3 rounded shadow">
       <div>
         <span className="font-semibold">{item.product.name}</span>
         <br />
@@ -40,19 +26,19 @@ const CartItemCard = ({ item }: Props) => {
       </div>
       <div>
         <button
-          //   onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
           className="bg-gray-300 text-gray-800 px-2 py-1 rounded mr-1 hover:bg-gray-400"
         >
           -
         </button>
         <button
-          //   onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
           className="bg-gray-300 text-gray-800 px-2 py-1 rounded mr-1 hover:bg-gray-400"
         >
           +
         </button>
         <button
-          //   onClick={() => removeFromCart(item.product.id)}
+          onClick={() => removeFromCart(item.product.id)}
           className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
         >
           삭제

@@ -1,25 +1,20 @@
-import { Product, Discount } from '../../types';
+import AddProductToCartButton from './AddProductToCartButton';
+import { Product } from '../../types';
+import { getRemainingStock, getMaxDiscount } from '../utils/product';
+import { useCartContext } from '../contexts';
 
 interface Props {
   product: Product;
-  onAddToCart: (p: Product) => void;
 }
 
-const ProductCard = ({ product, onAddToCart }: Props) => {
-  // TODO: remaining stock 계산
-  //   const remainingStock = getRemainingStock(product);
-  const remainingStock = 33;
+const ProductCard = ({ product }: Props) => {
+  const { cart } = useCartContext();
 
-  const getMaxDiscount = (discounts: Discount[]) => {
-    return discounts.reduce((max, discount) => Math.max(max, discount.rate), 0);
-  };
+  const remainingStock = getRemainingStock(product, cart);
+  const maxDiscountRate = getMaxDiscount(product);
 
   return (
-    <div
-      key={product.id}
-      data-testid={`product-${product.id}`}
-      className="bg-white p-3 rounded shadow"
-    >
+    <div data-testid={`product-${product.id}`} className="bg-white p-3 rounded shadow">
       <div className="flex justify-between items-center mb-2">
         <span className="font-semibold">{product.name}</span>
         <span className="text-gray-600">{product.price.toLocaleString()}원</span>
@@ -30,7 +25,7 @@ const ProductCard = ({ product, onAddToCart }: Props) => {
         </span>
         {product.discounts.length > 0 && (
           <span className="ml-2 font-medium text-blue-600">
-            최대 {(getMaxDiscount(product.discounts) * 100).toFixed(0)}% 할인
+            최대 {(maxDiscountRate * 100).toFixed(0)}% 할인
           </span>
         )}
       </div>
@@ -43,17 +38,7 @@ const ProductCard = ({ product, onAddToCart }: Props) => {
           ))}
         </ul>
       )}
-      <button
-        onClick={() => onAddToCart(product)}
-        className={`w-full px-3 py-1 rounded ${
-          remainingStock > 0
-            ? 'bg-blue-500 text-white hover:bg-blue-600'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        }`}
-        disabled={remainingStock <= 0}
-      >
-        {remainingStock > 0 ? '장바구니에 추가' : '품절'}
-      </button>
+      <AddProductToCartButton product={product} />
     </div>
   );
 };
