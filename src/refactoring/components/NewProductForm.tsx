@@ -2,7 +2,11 @@ import { useState } from 'react';
 import { Product } from '../../types';
 import { useProductsContext } from '../contexts';
 
-const NewProductForm = () => {
+interface Props {
+  onAddNewProduct?: () => void;
+}
+
+const NewProductForm = ({ onAddNewProduct }: Props) => {
   const { addProduct } = useProductsContext();
   const [newProduct, setNewProduct] = useState<Omit<Product, 'id'>>({
     name: '',
@@ -20,11 +24,14 @@ const NewProductForm = () => {
       stock: 0,
       discounts: [],
     });
-    // setShowNewProductForm(false);
+
+    if (onAddNewProduct) {
+      onAddNewProduct();
+    }
   };
 
   return (
-    <form className="bg-white p-4 rounded shadow mb-4">
+    <div className="bg-white p-4 rounded shadow mb-4">
       <h3 className="text-xl font-semibold mb-2">새 상품 추가</h3>
       <div className="mb-2">
         <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
@@ -68,7 +75,7 @@ const NewProductForm = () => {
       >
         추가
       </button>
-    </form>
+    </div>
   );
 };
 

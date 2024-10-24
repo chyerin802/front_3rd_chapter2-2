@@ -95,7 +95,9 @@ const ProductAdminSection = () => {
       >
         {showNewProductForm ? '취소' : '새 상품 추가'}
       </button>
-      {showNewProductForm && <NewProductForm />}
+      {showNewProductForm && (
+        <NewProductForm onAddNewProduct={() => setShowNewProductForm(false)} />
+      )}
       <div className="space-y-2">
         {products.map((product, index) => (
           <div
