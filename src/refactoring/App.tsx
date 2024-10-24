@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { CartPage } from './pages/CartPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
 import Header from './components/Header.tsx';
 import { Coupon, Product } from '../types.ts';
-import { useCoupons, useProducts } from './hooks';
+import { useCoupons, useProducts, useUserRole } from './hooks';
 import { ProductsProvider, CouponsProvider, CartProvider } from './contexts';
 
 const initialProducts: Product[] = [
@@ -51,15 +50,11 @@ const initialCoupons: Coupon[] = [
 const App = () => {
   const { products, updateProduct, addProduct } = useProducts(initialProducts);
   const { coupons, addCoupon } = useCoupons(initialCoupons);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const handleTogglePage = () => {
-    setIsAdmin(!isAdmin);
-  };
+  const { isAdmin, toggleRole } = useUserRole();
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header isAdmin={isAdmin} onTogglePage={handleTogglePage} />
+      <Header isAdmin={isAdmin} toggleRole={toggleRole} />
       <ProductsProvider initialProducts={initialProducts}>
         <CouponsProvider initialCoupons={initialCoupons}>
           <main className="container mx-auto mt-6">
